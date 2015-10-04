@@ -133,14 +133,12 @@ static std::string GenTypeGet(const Parser &parser, const Type &type,
 
 // Generate an enum declaration and an enum string lookup table.
 static void GenEnum(const Parser &parser, EnumDef &enum_def,
-                    std::string *code_ptr, std::string *code_ptr_post,
-                    const GeneratorOptions &opts) {
+                    std::string *code_ptr, const GeneratorOptions &opts) {
   (void)parser;
   (void)opts;
 
   if (enum_def.generated) return;
   std::string &code = *code_ptr;
-  std::string &code_post = *code_ptr_post;
   GenComment(enum_def.doc_comment, code_ptr, nullptr);
   code += "pub enum " + enum_def.name + " {\n";
   for (auto it = enum_def.vals.vec.begin();
@@ -572,7 +570,7 @@ std::string GenerateRust(const Parser &parser, const GeneratorOptions &opts) {
   std::string enum_code, enum_code_post;
   for (auto it = parser.enums_.vec.begin();
        it != parser.enums_.vec.end(); ++it) {
-    GenEnum(parser, **it, &enum_code, &enum_code_post, opts);
+    GenEnum(parser, **it, &enum_code, opts);
   }
 
   // Generate code for all structs, then all tables.
